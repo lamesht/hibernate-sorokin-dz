@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: sorokin_hibernate_dz
+  datasource:
+    url: jdbc:postgresql://localhost:5432/mydb
+    username: admin
+    password: password
