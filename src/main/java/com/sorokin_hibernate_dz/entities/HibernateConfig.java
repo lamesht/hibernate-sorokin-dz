@@ -1,4 +1,4 @@
-package com.lamesht.sorokin_hibernate_dz;
+package com.sorokin_hibernate_dz.entities;
 
 import org.hibernate.SessionFactory;
 import org.springframework.context.annotation.Bean;

@@ -1,6 +1,8 @@
-package com.lamesht.sorokin_hibernate_dz;
+package com.sorokin_hibernate_dz.entities;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,16 +27,17 @@ public class Order {
 
     private LocalDateTime orderDate;
     private Long totalAmount;
+    @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;
 
-    public Order(LocalDateTime orderDate, Long totalAmount, OrderStatus status) {
+    public Order(LocalDateTime orderDate, Long totalAmount) {
         this.orderDate = orderDate;
         this.totalAmount = totalAmount;
-        this.status = status;
+        this.status = OrderStatus.CREATE;
     }
 
     @Override
