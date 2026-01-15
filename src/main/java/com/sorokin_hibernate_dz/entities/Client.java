@@ -42,7 +42,10 @@ public class Client {
             cascade = CascadeType.ALL)
     private List<Order> orders = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {
+            CascadeType.MERGE, CascadeType.PERSIST,
+            CascadeType.DETACH, CascadeType.REFRESH
+    })
     @JoinTable(
             name = "client_coupons",
             joinColumns = @JoinColumn(
@@ -55,9 +58,25 @@ public class Client {
     private List<Coupon> coupons = new ArrayList<>();
 
     public Client(String name, String email) {
-        this.name = name;
-        this.email = email;
+        setName(name);
+        setEmail(email);
         this.registrationDate = LocalDateTime.now();
+    }
+
+    public void setName(String name) {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Invalid client name: " + name);
+        }
+
+        this.name = name;
+    }
+
+    public void setEmail(String email) {
+        if (email == null || email.isBlank()) {
+            throw new IllegalArgumentException("Invalid email: " + email);
+        }
+
+        this.email = email;
     }
 
 
