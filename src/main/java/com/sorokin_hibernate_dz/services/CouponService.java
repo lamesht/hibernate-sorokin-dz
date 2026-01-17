@@ -3,7 +3,9 @@ package com.sorokin_hibernate_dz.services;
 import com.sorokin_hibernate_dz.entities.Coupon;
 import com.sorokin_hibernate_dz.repositories.CouponRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.stereotype.Service;
 
+@Service
 public class CouponService {
     private final CouponRepository couponRepository;
 

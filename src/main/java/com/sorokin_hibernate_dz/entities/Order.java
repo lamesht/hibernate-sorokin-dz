@@ -18,25 +18,31 @@ import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
-@Getter
-@Setter
 @Table(name = "orders")
 public class Order {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter @Setter
     private Long id;
 
+    @Getter
     private LocalDateTime orderDate;
+    @Getter
     private Long totalAmount;
+
     @Enumerated(EnumType.STRING)
+    @Getter @Setter
     private OrderStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id", nullable = false)
+    @Getter
     private Client client;
 
-    public Order(LocalDateTime orderDate, Long totalAmount) {
-        this.orderDate = orderDate;
+    public Order(Client client, Long totalAmount) {
         this.totalAmount = totalAmount;
+        this.client = client;
+
+        this.orderDate = LocalDateTime.now();
         this.status = OrderStatus.CREATE;
     }
 

@@ -13,15 +13,16 @@ import lombok.Setter;
 
 @Entity
 @NoArgsConstructor
-@Getter
-@Setter
 @Table(name = "profiles")
 public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter @Setter
     private Long id;
 
+    @Getter
     private String address;
+    @Getter
     private String phoneNumber;
 
     @OneToOne
@@ -30,11 +31,13 @@ public class Profile {
             unique = true,
             nullable = false
     )
+    @Getter
     private Client client;
 
-    public Profile(String address, String phoneNumber) {
+    public Profile(String address, String phoneNumber, Client client) {
         this.address = address;
         this.phoneNumber = phoneNumber;
+        this.client = client;
     }
 
     @Override

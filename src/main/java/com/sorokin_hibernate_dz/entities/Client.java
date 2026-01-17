@@ -18,24 +18,28 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
 @NoArgsConstructor
-@Getter
-@Setter
 @Table(name = "clients")
 public class Client {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter @Setter
     private Long id;
 
+    @Getter
     private String name;
+    @Getter
     private String email;
+
+    @Getter
     private LocalDateTime registrationDate;
 
     @OneToOne(mappedBy = "client", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL, orphanRemoval = true)
+    @Getter
     private Profile profile;
 
     @OneToMany(mappedBy = "client", fetch = FetchType.LAZY,
@@ -60,7 +64,67 @@ public class Client {
     public Client(String name, String email) {
         setName(name);
         setEmail(email);
+
         this.registrationDate = LocalDateTime.now();
+    }
+
+    public void addOrder(Order newOrder) {
+        if (newOrder == null) {
+            throw new IllegalArgumentException("Order cannot be null");
+        }
+
+        if (newOrder.getClient() != null && !this.equals(newOrder.getClient())) {
+            throw new IllegalStateException(
+                    String.format("Order already belongs to another client (ID: %d)",
+                            newOrder.getClient().getId())
+            );
+        }
+
+        if (!orders.contains(newOrder)) {
+            orders.add(newOrder);
+
+            newOrder.setClient(this);
+        }
+    }
+
+    public void addCoupon(Coupon coupon) {
+        if (coupon == null) {
+            throw new IllegalArgumentException("Coupon cannot be null");
+        }
+
+        if (!coupons.contains(coupon)) {
+            coupons.add(coupon);
+        }
+    }
+    public void removeCoupon(Coupon coupon) {
+        if (coupon == null) {
+            throw new IllegalArgumentException("Coupon cannot be null");
+        }
+
+        coupons.remove(coupon);
+    }
+
+    public void setProfile(Profile profile) {
+        if (profile == null) {
+            throw new IllegalArgumentException("Profile cannot be null");
+        }
+
+        if (profile.getClient() != null && !this.equals(profile.getClient())) {
+            throw new IllegalStateException(
+                    String.format("Profile already belongs to another client (ID: %d)",
+                            profile.getClient().getId())
+            );
+        }
+
+        this.profile = profile;
+    }
+
+    public List<Order> getOrders() {
+        return Collections.unmodifiableList(orders);
+    }
+
+    public List<Coupon> getCoupons() {
+        return Collections.unmodifiableList(coupons);
     }
 
     public void setName(String name) {
@@ -78,7 +142,6 @@ public class Client {
 
         this.email = email;
     }
-
 
     @Override
     public String toString() {

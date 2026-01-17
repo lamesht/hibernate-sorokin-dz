@@ -11,26 +11,61 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @NoArgsConstructor
-@Getter
-@Setter
 @Table(name = "coupons")
 public class Coupon {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter @Setter
     private Long id;
 
+    @Getter @Setter
     private String code;
+    @Getter @Setter
     private Long discount;
 
     @ManyToMany(mappedBy = "coupons", fetch = FetchType.LAZY)
-    private List<Client> clients;
+    private List<Client> clients = new ArrayList<>();
 
     public Coupon(String code, Long discount) {
         this.code = code;
         this.discount = discount;
+    }
+
+    public void addClient(Client client) {
+        if (client == null) {
+            throw new IllegalArgumentException("Client can't be null");
+        }
+        if (!clients.contains(client)) {
+            clients.add(client);
+        }
+    }
+    public void removeClient(Client client) {
+        if (client == null) {
+            throw new IllegalArgumentException("Client can't be null");
+        }
+
+        clients.remove(client);
+    }
+
+    public List<Client> getClients() {
+        return Collections.unmodifiableList(clients);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Coupon coupon)) return false;
+        return Objects.equals(id, coupon.id) && Objects.equals(code, coupon.code);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, code);
     }
 
     @Override
