@@ -13,16 +13,20 @@ public class CouponService {
         this.couponRepository = couponRepository;
     }
 
-    public void editDiscountCoupon(Long couponId, Long updatedDiscount) {
+    public Coupon editDiscountCoupon(Long couponId, Long updatedDiscount) {
         Coupon coupon = findCouponById(couponId);
 
         coupon.setDiscount(updatedDiscount);
+
+        return couponRepository.save(coupon);
     }
 
-    public void editCodeCoupon(Long couponId, String updatedCode) {
+    public Coupon editCodeCoupon(Long couponId, String updatedCode) {
         Coupon coupon = findCouponById(couponId);
 
         coupon.setCode(updatedCode);
+
+        return couponRepository.save(coupon);
     }
 
     private Coupon findCouponById(Long couponId){

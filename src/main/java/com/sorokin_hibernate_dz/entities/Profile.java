@@ -40,6 +40,24 @@ public class Profile {
         this.client = client;
     }
 
+    public void setAddress(String address){
+        if (address == null || address.isBlank()) {
+            throw new IllegalArgumentException("Invalid address: " + address);
+        }
+
+        this.address = address;
+    }
+
+    public void setPhoneNumber(String phoneNumber){
+        if (phoneNumber == null || phoneNumber.isBlank()) {
+            throw new IllegalArgumentException("Invalid phoneNumber: " + phoneNumber);
+        }
+
+        this.address = phoneNumber;
+    }
+
+
+
     @Override
     public String toString() {
         return "Profile{" +

@@ -82,8 +82,6 @@ public class Client {
 
         if (!orders.contains(newOrder)) {
             orders.add(newOrder);
-
-            newOrder.setClient(this);
         }
     }
 
