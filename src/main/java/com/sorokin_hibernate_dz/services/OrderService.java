@@ -7,6 +7,7 @@ import com.sorokin_hibernate_dz.repositories.OrderRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -28,14 +29,17 @@ public class OrderService {
     }
 
     public List<Order> findOrdersByDateRange(LocalDateTime startDate, LocalDateTime endDate) {
-        return orderRepository.findByOrderDateBetween(startDate, endDate);
+        List<Order> requiredOrders = orderRepository.findByOrderDateBetween(startDate, endDate);
+        return Collections.unmodifiableList(requiredOrders);
     }
 
     public List<Order> findOrdersByAmountRange(Long minAmount, Long maxAmount) {
-        return orderRepository.findByTotalAmountBetween(minAmount, maxAmount);
+        List<Order> requiredOrders = orderRepository.findByTotalAmountBetween(minAmount, maxAmount);
+        return Collections.unmodifiableList(requiredOrders);
     }
 
     public List<Order> findOrdersByStatus(OrderStatus status) {
-        return orderRepository.findByStatus(status);
+        List<Order> requiredOrders = orderRepository.findByStatus(status);
+        return Collections.unmodifiableList(requiredOrders);
     }
 }
