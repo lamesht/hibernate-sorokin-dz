@@ -1,5 +1,6 @@
 package com.sorokin_hibernate_dz.entities;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -27,12 +28,13 @@ public class Coupon {
     @Getter @Setter
     private String code;
     @Getter @Setter
-    private Long discount;
+    private Double discount;
 
     @ManyToMany(mappedBy = "coupons", fetch = FetchType.LAZY)
     private List<Client> clients = new ArrayList<>();
 
-    public Coupon(String code, Long discount) {
+
+    public Coupon(String code, Double discount) {
         this.code = code;
         this.discount = discount;
     }
