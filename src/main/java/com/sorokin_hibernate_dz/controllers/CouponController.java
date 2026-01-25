@@ -3,14 +3,14 @@ package com.sorokin_hibernate_dz.controllers;
 import com.sorokin_hibernate_dz.entities.Coupon;
 import com.sorokin_hibernate_dz.entities.CouponPatchRequest;
 import com.sorokin_hibernate_dz.services.CouponService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -25,7 +25,7 @@ public class CouponController {
     }
 
     @GetMapping
-    public List<Coupon> findAll(){
+    public List<Coupon> findAll() {
         return couponService.findAll();
     }
 
@@ -38,23 +38,22 @@ public class CouponController {
     @GetMapping("/{couponId}")
     public Coupon findCouponById(
             @PathVariable Long couponId
-    ){
+    ) {
         return couponService.findCouponById(couponId);
     }
 
-
-
-    @PatchMapping("/{couponId}/code")
-    public Coupon changeCouponCode(
+    @PatchMapping("/{couponId}")
+    public ResponseEntity<Coupon> changeCoupon(
             @PathVariable Long couponId,
-            @RequestParam String updatedCode) {
-        return couponService.changeCouponCode(couponId, updatedCode);
-    }
+            CouponPatchRequest patchRequest
+    ) {
+        if (!patchRequest.hasUpdates()) {
+            Coupon currentCoupon = couponService.findCouponById(couponId);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                    .body(currentCoupon);
+        }
 
-    @PatchMapping("/{couponId}/discount")
-    public Coupon changeCouponDiscount(
-            @PathVariable Long couponId,
-            @RequestParam Double discount) {
-        return couponService.changeCouponDiscount(couponId, discount);
+        Coupon updatedCoupon = couponService.applyCouponPatch(couponId, patchRequest);
+        return ResponseEntity.ok(updatedCoupon);
     }
 }

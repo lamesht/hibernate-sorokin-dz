@@ -1,6 +1,5 @@
 package com.sorokin_hibernate_dz.entities;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -13,6 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -39,12 +39,31 @@ public class Coupon {
         this.discount = discount;
     }
 
+    public void addClients(Collection<Client> clientsToAdd){
+        if (clientsToAdd == null){
+            throw new IllegalArgumentException("Clients collection cannot be null");
+        }
+
+        for (Client clientToAdd : clientsToAdd){
+            addClient(clientToAdd);
+        }
+    }
     public void addClient(Client client) {
         if (client == null) {
             throw new IllegalArgumentException("Client can't be null");
         }
         if (!clients.contains(client)) {
             clients.add(client);
+        }
+    }
+
+    public void removeClients(Collection<Client> clientsToRemove){
+        if (clientsToRemove == null){
+            throw new IllegalArgumentException("Clients collection cannot be null");
+        }
+
+        for (Client clientToRemove : clientsToRemove) {
+            removeClient(clientToRemove);
         }
     }
     public void removeClient(Client client) {
