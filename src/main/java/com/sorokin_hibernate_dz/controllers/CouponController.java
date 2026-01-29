@@ -6,6 +6,7 @@ import com.sorokin_hibernate_dz.services.ClientCouponRelationshipService;
 import com.sorokin_hibernate_dz.services.CouponService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/app/coupons")
@@ -62,5 +62,25 @@ public class CouponController {
         Coupon coupon = couponService.applyCouponPatch(couponId, patchRequest);
 
         return ResponseEntity.ok(coupon);
+    }
+
+    @PostMapping("/{couponId}/clients")
+    public ResponseEntity<Void> addClientsToCoupon(
+            @PathVariable Long couponId,
+            @RequestBody List<Long> clientIds
+    ){
+        clientCouponRelationshipService.addClientsToCoupon(couponId, clientIds);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{couponId}/clients")
+    public ResponseEntity<Void> removeClientsFromCoupon(
+            @PathVariable Long couponId,
+            @RequestBody List<Long> clientIds
+    ){
+        clientCouponRelationshipService.removeClientsFromCoupon(couponId, clientIds);
+
+        return ResponseEntity.ok().build();
     }
 }
