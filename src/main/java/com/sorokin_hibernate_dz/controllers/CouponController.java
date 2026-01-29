@@ -2,6 +2,7 @@ package com.sorokin_hibernate_dz.controllers;
 
 import com.sorokin_hibernate_dz.entities.Coupon;
 import com.sorokin_hibernate_dz.entities.CouponPatchRequest;
+import com.sorokin_hibernate_dz.services.ClientCouponRelationshipService;
 import com.sorokin_hibernate_dz.services.CouponService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,14 +15,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/app/coupons")
 public class CouponController {
     private final CouponService couponService;
+    private final ClientCouponRelationshipService clientCouponRelationshipService;
 
-    public CouponController(CouponService couponService) {
+    public CouponController(CouponService couponService, ClientCouponRelationshipService clientCouponRelationshipService) {
         this.couponService = couponService;
+        this.clientCouponRelationshipService = clientCouponRelationshipService;
     }
 
     @GetMapping
@@ -36,24 +40,27 @@ public class CouponController {
     }
 
     @GetMapping("/{couponId}")
-    public Coupon findCouponById(
+    public ResponseEntity<Coupon> findCouponById(
             @PathVariable Long couponId
     ) {
-        return couponService.findCouponById(couponId);
+        Coupon coupon = couponService.findCouponById(couponId);
+
+        return ResponseEntity.ok(coupon);
     }
 
     @PatchMapping("/{couponId}")
     public ResponseEntity<Coupon> changeCoupon(
             @PathVariable Long couponId,
-            CouponPatchRequest patchRequest
+            @RequestBody CouponPatchRequest patchRequest
     ) {
         if (!patchRequest.hasUpdates()) {
-            Coupon currentCoupon = couponService.findCouponById(couponId);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT)
-                    .body(currentCoupon);
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .build();
         }
 
-        Coupon updatedCoupon = couponService.applyCouponPatch(couponId, patchRequest);
-        return ResponseEntity.ok(updatedCoupon);
+        Coupon coupon = couponService.applyCouponPatch(couponId, patchRequest);
+
+        return ResponseEntity.ok(coupon);
     }
 }

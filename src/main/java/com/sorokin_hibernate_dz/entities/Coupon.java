@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -39,38 +38,13 @@ public class Coupon {
         this.discount = discount;
     }
 
-    public void addClients(Collection<Client> clientsToAdd){
-        if (clientsToAdd == null){
-            throw new IllegalArgumentException("Clients collection cannot be null");
-        }
-
-        for (Client clientToAdd : clientsToAdd){
-            addClient(clientToAdd);
-        }
-    }
-    public void addClient(Client client) {
-        if (client == null) {
-            throw new IllegalArgumentException("Client can't be null");
-        }
+    void addClient(Client client) {
         if (!clients.contains(client)) {
             clients.add(client);
         }
     }
 
-    public void removeClients(Collection<Client> clientsToRemove){
-        if (clientsToRemove == null){
-            throw new IllegalArgumentException("Clients collection cannot be null");
-        }
-
-        for (Client clientToRemove : clientsToRemove) {
-            removeClient(clientToRemove);
-        }
-    }
-    public void removeClient(Client client) {
-        if (client == null) {
-            throw new IllegalArgumentException("Client can't be null");
-        }
-
+    void removeClient(Client client) {
         clients.remove(client);
     }
 
@@ -81,12 +55,12 @@ public class Coupon {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Coupon coupon)) return false;
-        return Objects.equals(id, coupon.id) && Objects.equals(code, coupon.code);
+        return Objects.equals(id, coupon.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, code);
+        return Objects.hashCode(id);
     }
 
     @Override

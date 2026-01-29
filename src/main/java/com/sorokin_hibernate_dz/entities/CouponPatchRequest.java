@@ -11,13 +11,8 @@ import java.util.List;
 public class CouponPatchRequest {
     private String code;
     private Double discount;
-    private List<Client> addClients;
-    private List<Client> removeClients;
 
     public boolean hasUpdates() {
-        return code != null
-                || discount != null
-                || addClients != null
-                || removeClients != null;
+        return code != null || discount != null;
     }
 }

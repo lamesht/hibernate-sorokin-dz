@@ -1,13 +1,13 @@
 package com.sorokin_hibernate_dz.services;
 
-import com.sorokin_hibernate_dz.entities.Client;
 import com.sorokin_hibernate_dz.entities.Coupon;
 import com.sorokin_hibernate_dz.entities.CouponPatchRequest;
 import com.sorokin_hibernate_dz.repositories.CouponRepository;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CouponService {
@@ -17,45 +17,33 @@ public class CouponService {
         this.couponRepository = couponRepository;
     }
 
-    public Optional<Coupon> applyCouponPatch(Long couponId, CouponPatchRequest patchRequest) {
-        Optional<Coupon> optionalCoupon = findCouponById(couponId);
-
-        if (optionalCoupon.isEmpty()) {
-            return Optional.empty();
-        }
-
-        Coupon updatableCoupon = optionalCoupon.get();
+    @Transactional
+    public Coupon applyCouponPatch(Long couponId, CouponPatchRequest patchRequest) {
+        Coupon updatableCoupon = findCouponById(couponId);
 
         if (patchRequest.hasUpdates()) {
             String patchCode = patchRequest.getCode();
             Double patchDiscount = patchRequest.getDiscount();
-            List<Client> patchAddClients = patchRequest.getAddClients();
-            List<Client> pathRemoveClients = patchRequest.getRemoveClients();
 
-            if (patchCode != null) {
-                updatableCoupon.setCode(patchCode);
-            }
-            if (patchDiscount != null) {
-                updatableCoupon.setDiscount(patchDiscount);
-            }
-            if(!patchAddClients.isEmpty() || patchAddClients != null){
-
-            }
+            updateCouponCode(updatableCoupon, patchCode);
+            updateCouponDiscount(updatableCoupon, patchDiscount);
         }
 
-
-    }
-
-    private Coupon updateCouponDiscount(Coupon updatableCoupon, Double updatedDiscount) {
-        if (updatedDiscount != null) {
-            updatableCoupon.setDiscount(updatedDiscount);
-        }
+        couponRepository.save(updatableCoupon);
 
         return updatableCoupon;
     }
 
-    private Coupon updateCouponCode(Coupon updatableCoupon, String updatedCode) {
+    private void updateCouponDiscount(Coupon updatableCoupon, Double updatedDiscount) {
+        if (updatedDiscount != null) {
+            updatableCoupon.setDiscount(updatedDiscount);
+        }
+    }
 
+    private void updateCouponCode(Coupon updatableCoupon, String updateCode) {
+        if (updateCode != null && !updateCode.isBlank()) {
+            updatableCoupon.setCode(updateCode);
+        }
     }
 
     public Coupon createCoupon(Coupon coupon) {
@@ -66,8 +54,12 @@ public class CouponService {
         return couponRepository.findAll();
     }
 
-    public Optional<Coupon> findCouponById(Long couponId) {
-        return couponRepository.findById(couponId);
+    public Coupon findCouponById(Long couponId) {
+        return couponRepository.findById(couponId)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Not found coupon with id: %s"
+                                .formatted(couponId))
+                );
     }
 
 }

@@ -23,7 +23,7 @@ import java.util.List;
 
 @Entity
 @NoArgsConstructor
-@Table(name = "addClients")
+@Table(name = "addAllClients")
 public class Client {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter @Setter
@@ -92,6 +92,9 @@ public class Client {
 
         if (!coupons.contains(coupon)) {
             coupons.add(coupon);
+            if(!coupon.getClients().contains(this)){
+                coupon.addClient(this);
+            }
         }
     }
     public void removeCoupon(Coupon coupon) {
@@ -100,6 +103,7 @@ public class Client {
         }
 
         coupons.remove(coupon);
+        coupon.removeClient(this);
     }
 
     public void setProfile(Profile profile) {
