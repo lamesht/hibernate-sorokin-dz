@@ -1,28 +1,25 @@
 package com.sorokin_hibernate_dz;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import org.springframework.http.HttpStatus;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
 @Getter
+@ToString
 public class ErrorResponse{
-    private final HttpStatus httpStatus;
+    @NotNull
+    private final String code;
+    @NotNull
     private final String message;
+    @NotNull
     private final LocalDateTime timeStamp;
 
-    public ErrorResponse(HttpStatus httpStatus, String message) {
-        this.httpStatus = httpStatus;
+    public ErrorResponse(String code, String message) {
+        this.code = code;
         this.message = message;
         this.timeStamp = LocalDateTime.now();
     }
 
-    @Override
-    public String toString() {
-        return "ErrorResponse{" +
-                "httpStatus=" + httpStatus +
-                ", message='" + message + '\'' +
-                ", timeStamp=" + timeStamp +
-                '}';
-    }
 }
