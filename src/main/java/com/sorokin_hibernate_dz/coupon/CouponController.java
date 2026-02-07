@@ -1,9 +1,7 @@
-package com.sorokin_hibernate_dz.controllers;
+package com.sorokin_hibernate_dz.coupon;
 
-import com.sorokin_hibernate_dz.entities.Coupon;
-import com.sorokin_hibernate_dz.entities.CouponPatchRequest;
 import com.sorokin_hibernate_dz.services.ClientCouponRelationshipService;
-import com.sorokin_hibernate_dz.services.CouponService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,30 +26,28 @@ public class CouponController {
         this.clientCouponRelationshipService = clientCouponRelationshipService;
     }
 
-    @GetMapping
-    public List<Coupon> findAll() {
-        return couponService.findAll();
-    }
-
     @PostMapping
-    public Coupon createCoupon(
-            @RequestBody Coupon coupon) {
-        return couponService.createCoupon(coupon);
+    public ResponseEntity<CouponSimpleResponse> createCoupon(
+            @RequestBody @Valid
+            CouponCreateRequest request) {
+        var simpleResponse = couponService.createCoupon(request);
+
+        return ResponseEntity.ok(simpleResponse);
     }
 
     @GetMapping("/{couponId}")
-    public ResponseEntity<Coupon> findCouponById(
+    public ResponseEntity<CouponResponse> findCouponById(
             @PathVariable Long couponId
     ) {
-        Coupon coupon = couponService.findCouponById(couponId);
+        CouponResponse coupon = couponService.findCouponById(couponId);
 
         return ResponseEntity.ok(coupon);
     }
 
     @PatchMapping("/{couponId}")
-    public ResponseEntity<Coupon> changeCoupon(
+    public ResponseEntity<CouponDomain> changeCoupon(
             @PathVariable Long couponId,
-            @RequestBody CouponPatchRequest patchRequest
+            @RequestBody @Valid CouponPatchRequest patchRequest
     ) {
         if (!patchRequest.hasUpdates()) {
             return ResponseEntity
@@ -59,7 +55,7 @@ public class CouponController {
                     .build();
         }
 
-        Coupon coupon = couponService.applyCouponPatch(couponId, patchRequest);
+        CouponDomain coupon = couponService.applyCouponPatch(couponId, patchRequest);
 
         return ResponseEntity.ok(coupon);
     }

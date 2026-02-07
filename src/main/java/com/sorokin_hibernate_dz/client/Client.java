@@ -1,5 +1,8 @@
-package com.sorokin_hibernate_dz.entities;
+package com.sorokin_hibernate_dz.client;
 
+import com.sorokin_hibernate_dz.coupon.CouponDomain;
+import com.sorokin_hibernate_dz.entities.Order;
+import com.sorokin_hibernate_dz.entities.Profile;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -44,7 +47,7 @@ public class Client {
 
     @OneToMany(mappedBy = "client", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
-    private List<Order> orders = new ArrayList<>();
+    private final List<Order> orders = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {
             CascadeType.MERGE, CascadeType.PERSIST,
@@ -59,7 +62,7 @@ public class Client {
                     name = "coupon_id"
             )
     )
-    private List<Coupon> coupons = new ArrayList<>();
+    private final List<CouponDomain> coupons = new ArrayList<>();
 
     public Client(String name, String email) {
         setName(name);
@@ -85,9 +88,9 @@ public class Client {
         }
     }
 
-    public void addCoupon(Coupon coupon) {
+    public void addCouponDomain(CouponDomain coupon) {
         if (coupon == null) {
-            throw new IllegalArgumentException("Coupon cannot be null");
+            throw new IllegalArgumentException("CouponDomain cannot be null");
         }
 
         if (!coupons.contains(coupon)) {
@@ -97,9 +100,9 @@ public class Client {
             }
         }
     }
-    public void removeCoupon(Coupon coupon) {
+    public void removeCouponDomain(CouponDomain coupon) {
         if (coupon == null) {
-            throw new IllegalArgumentException("Coupon cannot be null");
+            throw new IllegalArgumentException("CouponDomain cannot be null");
         }
 
         coupons.remove(coupon);
@@ -125,7 +128,7 @@ public class Client {
         return Collections.unmodifiableList(orders);
     }
 
-    public List<Coupon> getCoupons() {
+    public List<CouponDomain> getCouponDomains() {
         return Collections.unmodifiableList(coupons);
     }
 

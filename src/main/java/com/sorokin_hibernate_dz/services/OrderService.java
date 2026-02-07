@@ -1,6 +1,6 @@
 package com.sorokin_hibernate_dz.services;
 
-import com.sorokin_hibernate_dz.entities.Client;
+import com.sorokin_hibernate_dz.client.Client;
 import com.sorokin_hibernate_dz.entities.Order;
 import com.sorokin_hibernate_dz.entities.OrderStatus;
 import com.sorokin_hibernate_dz.repositories.OrderRepository;

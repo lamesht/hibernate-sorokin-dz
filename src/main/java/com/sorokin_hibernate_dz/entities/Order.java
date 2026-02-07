@@ -1,5 +1,6 @@
 package com.sorokin_hibernate_dz.entities;
 
+import com.sorokin_hibernate_dz.client.Client;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -35,7 +36,6 @@ public class Order {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id", nullable = false)
-    @Getter
     private Client client;
 
     public Order(Client client, Long totalAmount) {
@@ -44,6 +44,10 @@ public class Order {
 
         this.orderDate = LocalDateTime.now();
         this.status = OrderStatus.CREATE;
+    }
+
+    public Client getClient() {
+        return client;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.sorokin_hibernate_dz.entities;
 
+import com.sorokin_hibernate_dz.client.Client;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

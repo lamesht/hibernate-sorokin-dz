@@ -1,13 +1,9 @@
-package com.sorokin_hibernate_dz.services;
+package com.sorokin_hibernate_dz.client;
 
-import com.sorokin_hibernate_dz.entities.Client;
-import com.sorokin_hibernate_dz.entities.Coupon;
-import com.sorokin_hibernate_dz.repositories.ClientRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ClientService {
