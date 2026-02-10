@@ -9,66 +9,59 @@ public class CouponService {
     private final CouponRepository couponRepository;
     private final CouponMapper mapper;
 
-    public CouponService(CouponRepository couponRepository, CouponMapper mapper) {
+    public CouponService(
+            CouponRepository couponRepository,
+            CouponMapper mapper) {
         this.couponRepository = couponRepository;
         this.mapper = mapper;
     }
 
     @Transactional
-    public CouponDomain applyCouponPatch(Long couponId, CouponPatchRequest patchRequest) {
-        var entity = findEntityById(couponId);
+    public CouponResponse applyCouponPatch(
+            Long couponId,
+            CouponPatchRequest patchRequest
+    ) {
+        var entity = findEntityByIdOrThrow(couponId);
 
-        CouponDomain updatableCoupon = mapper.toDomain(entity);
+        var domain = mapper.toDomain(entity);
 
         String patchCode = patchRequest.getCode();
         Double patchDiscount = patchRequest.getDiscount();
 
-        updateCouponCode(updatableCoupon, patchCode);
-        updateCouponDiscount(updatableCoupon, patchDiscount);
+        domain.changeCode(patchCode);
+        entity.setCode(patchCode);
 
-        return updatableCoupon;
+        domain.changeDiscount(patchDiscount);
+        entity.setDiscount(patchDiscount);
+
+        return mapper.toResponse(domain);
     }
 
-    public CouponSimpleResponse createCoupon(CouponCreateRequest request) {
-        CouponDomain domain = mapper.fromCreateRequest(request);
+    @Transactional
+    public CouponResponse createCoupon(CouponCreateRequest request) {
+        var domainWithoutId = mapper.fromCreateRequest(request);
 
-        var savedEntity = couponRepository.save(mapper.toEntity(domain));
+        var entity = mapper.toEntity(domainWithoutId);
+        var savedEntity = couponRepository.save(entity);
 
-        domain.setId(savedEntity.getId());
+        var domain = mapper.toDomain(savedEntity);
 
-        return mapper.toSimpleResponse(domain);
+        return mapper.toResponse(domain);
     }
 
     public CouponResponse findCouponById(Long couponId) {
-        var entity = couponRepository.findById(couponId)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Not found coupon with id: %s"
-                                .formatted(couponId))
-                );
+        var entity = findEntityByIdOrThrow(couponId);
 
         var domain = mapper.toDomain(entity);
 
         return mapper.toResponse(domain);
     }
 
-    private CouponEntity findEntityById(Long couponId){
+    private CouponEntity findEntityByIdOrThrow(Long couponId){
         return couponRepository.findById(couponId)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "Entity with id %d not found"
+                        "Not found coupon (ID: %d)"
                                 .formatted(couponId)
                 ));
     }
-
-    private void updateCouponDiscount(CouponDomain updatableCoupon, Double updatedDiscount) {
-        if (updatedDiscount != null) {
-            updatableCoupon.changeDiscount(updatedDiscount);
-        }
-    }
-
-    private void updateCouponCode(CouponDomain updatableCoupon, String updateCode) {
-        if (updateCode != null && !updateCode.isBlank()) {
-            updatableCoupon.changeCode(updateCode);
-        }
-    }
-
 }

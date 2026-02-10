@@ -1,17 +1,19 @@
 package com.sorokin_hibernate_dz.coupon;
 
-import com.sorokin_hibernate_dz.client.Client;
+import com.sorokin_hibernate_dz.client.ClientEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Table(name = "coupon")
 public class CouponEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, updatable = false)
@@ -23,48 +25,48 @@ public class CouponEntity {
     private Double discount;
 
     @ManyToMany(mappedBy = "coupons")
-    private Set<Client> clients = new HashSet<>();
+    private Set<ClientEntity> clients = new HashSet<>();
 
-    public CouponEntity() {
+
+    static CouponEntity create(String code, Double discount) {
+        return new CouponEntity(code, discount);
     }
 
-    public CouponEntity(String code, Double discount) {
-        this.code = code;
-        this.discount = discount;
+    static CouponEntity of(Long id, String code, Double discount) {
+        return new CouponEntity(id, code, discount);
     }
 
-    CouponEntity(Long id, String code, Double discount, Set<Client> clients) {
+    private CouponEntity(Long id, String code, Double discount) {
         this.id = id;
         this.code = code;
         this.discount = discount;
-        this.clients = clients;
     }
 
-    public Long getId() {
+    private CouponEntity(String code, Double discount) {
+        this.code = code;
+        this.discount = discount;
+    }
+
+    Long getId() {
         return id;
     }
-    public void setId(Long id) {
-        this.id = id;
+
+    Double getDiscount() {
+        return discount;
     }
 
-    public String getCode() {
+    String getCode() {
         return code;
     }
-    public void setCode(String code) {
+
+    void setCode(String code) {
         this.code = code;
     }
 
-    public Double getDiscount() {
-        return discount;
-    }
-    public void setDiscount(Double discount) {
+    void setDiscount(Double discount) {
         this.discount = discount;
     }
 
-    public Set<Client> getClients() {
-        return clients;
-    }
-    public void setClients(Set<Client> clients) {
-        this.clients = clients;
+    private CouponEntity() {
     }
 }

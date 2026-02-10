@@ -26,7 +26,7 @@ import java.util.List;
 
 @Entity
 @NoArgsConstructor
-@Table(name = "addAllClients")
+@Table(name = "clients")
 public class Client {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter @Setter
@@ -88,7 +88,7 @@ public class Client {
         }
     }
 
-    public void addCouponDomain(CouponDomain coupon) {
+    public void addCoupon(CouponDomain coupon) {
         if (coupon == null) {
             throw new IllegalArgumentException("CouponDomain cannot be null");
         }
@@ -100,7 +100,7 @@ public class Client {
             }
         }
     }
-    public void removeCouponDomain(CouponDomain coupon) {
+    public void removeCoupon(CouponDomain coupon) {
         if (coupon == null) {
             throw new IllegalArgumentException("CouponDomain cannot be null");
         }
@@ -128,7 +128,7 @@ public class Client {
         return Collections.unmodifiableList(orders);
     }
 
-    public List<CouponDomain> getCouponDomains() {
+    public List<CouponDomain> getCoupons() {
         return Collections.unmodifiableList(coupons);
     }
 

@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ClientRepository extends JpaRepository<Client, Long> {
-    @Query("SELECT DISTINCT c FROM Client c LEFT JOIN FETCH c.coupons WHERE c.id IN :ids")
-    List<Client> findAllByIdsWithCoupons(@Param("ids") Collection<Long> ids);
+public interface ClientRepository extends JpaRepository<ClientEntity, Long> {
+    @Query("SELECT DISTINCT c FROM ClientEntity c LEFT JOIN FETCH c.coupons WHERE c.id IN :ids")
+    List<ClientEntity> findAllByIdsWithCoupons(@Param("ids") Collection<Long> ids);
 
-    @Query("SELECT c FROM Client c LEFT JOIN FETCH c.coupons WHERE c.id = :id")
-    Optional<Client> findByIdWithCoupons(@Param("id") Long id);
+    @Query("SELECT c FROM ClientEntity c LEFT JOIN FETCH c.coupons WHERE c.id = :id")
+    Optional<ClientEntity> findByIdWithCoupons(@Param("id") Long id);
 }

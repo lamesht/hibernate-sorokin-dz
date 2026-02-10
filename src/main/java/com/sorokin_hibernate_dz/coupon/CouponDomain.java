@@ -1,7 +1,8 @@
 package com.sorokin_hibernate_dz.coupon;
 
-import com.sorokin_hibernate_dz.client.Client;
+import com.sorokin_hibernate_dz.client.ClientDomain;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -10,26 +11,34 @@ public class CouponDomain {
     private Long id;
     private String code;
     private Double discount;
-    private Set<Client> clients = new HashSet<>();
+    private Set<ClientDomain> clients = new HashSet<>();
 
-    public CouponDomain(String code, Double discount) {
+
+    static CouponDomain create(String code, Double discount){
+        return new CouponDomain(code, discount);
+    }
+
+    static CouponDomain of(Long id, String code, Double discount) {
+        return new CouponDomain(id, code, discount);
+    }
+
+    private CouponDomain(String code, Double discount) {
         changeCode(code);
         changeDiscount(discount);
     }
 
-    CouponDomain(Long id, String code, Double discount, Set<Client> clients) {
+    private CouponDomain(Long id, String code, Double discount) {
         setId(id);
         changeCode(code);
         changeDiscount(discount);
-        this.clients = clients != null ? new HashSet<>(clients) : new HashSet<>();
     }
 
-    public void addClient(Client client) {
+    public void addClient(ClientDomain client) {
         if (!clients.contains(client)) {
             clients.add(client);
         }
     }
-    public void removeClient(Client client) {
+    public void removeClient(ClientDomain client) {
         clients.remove(client);
     }
 
@@ -59,14 +68,14 @@ public class CouponDomain {
         this.code = code;
     }
 
-    public Set<Client> getClients() {
-        return clients;
+    public Set<ClientDomain> getClients() {
+        return Collections.unmodifiableSet(clients);
     }
 
-    Long getId() {
+    public Long getId() {
         return id;
     }
-    void setId(Long id){
+    private void setId(Long id){
         if (id == null || id < 0) {
             throw new IllegalArgumentException(
                     "The id cannot be null and negative"

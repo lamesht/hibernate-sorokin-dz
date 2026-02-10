@@ -1,5 +1,6 @@
 package com.sorokin_hibernate_dz.coupon;
 
+import com.sorokin_hibernate_dz.client.ClientSimpleResponse;
 import com.sorokin_hibernate_dz.services.ClientCouponRelationshipService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -27,7 +28,7 @@ public class CouponController {
     }
 
     @PostMapping
-    public ResponseEntity<CouponSimpleResponse> createCoupon(
+    public ResponseEntity<CouponResponse> createCoupon(
             @RequestBody @Valid
             CouponCreateRequest request) {
         var simpleResponse = couponService.createCoupon(request);
@@ -45,7 +46,7 @@ public class CouponController {
     }
 
     @PatchMapping("/{couponId}")
-    public ResponseEntity<CouponDomain> changeCoupon(
+    public ResponseEntity<CouponResponse> changeCoupon(
             @PathVariable Long couponId,
             @RequestBody @Valid CouponPatchRequest patchRequest
     ) {
@@ -55,9 +56,9 @@ public class CouponController {
                     .build();
         }
 
-        CouponDomain coupon = couponService.applyCouponPatch(couponId, patchRequest);
+        var response = couponService.applyCouponPatch(couponId, patchRequest);
 
-        return ResponseEntity.ok(coupon);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/{couponId}/clients")
@@ -79,4 +80,11 @@ public class CouponController {
 
         return ResponseEntity.ok().build();
     }
+
+//    @GetMapping("/{couponId}/clients")
+//    public ResponseEntity<List<ClientSimpleResponse>> findCouponClients(
+//            @PathVariable Long couponId
+//    ){
+//
+//    }
 }
