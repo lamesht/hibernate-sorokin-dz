@@ -6,14 +6,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import sorokin_hibernate_dz.application.dto.createRequest.OrderCreateRequest;
 import sorokin_hibernate_dz.application.dto.filter.BetweenDateFilter;
 import sorokin_hibernate_dz.application.dto.filter.BetweenTotalAmountFilter;
+import sorokin_hibernate_dz.application.dto.filter.OrderStatusFilter;
 import sorokin_hibernate_dz.application.dto.response.OrderResponse;
 import sorokin_hibernate_dz.application.service.OrderService;
-import sorokin_hibernate_dz.domain.model.OrderStatus;
 
 import java.util.List;
 
@@ -56,9 +55,9 @@ public class OrderController {
 
     @PostMapping("/orders/by-status")
     public ResponseEntity<List<OrderResponse>> findAllOrdersByStatus(
-            @RequestParam(defaultValue = "CREATED") OrderStatus status
+            @RequestBody OrderStatusFilter filter
     ) {
-        var responseList = orderService.findOrdersByStatus(status);
+        var responseList = orderService.findOrdersByStatus(filter.status());
 
         return ResponseEntity.ok(responseList);
     }

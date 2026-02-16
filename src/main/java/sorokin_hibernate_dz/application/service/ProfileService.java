@@ -1,5 +1,6 @@
 package sorokin_hibernate_dz.application.service;
 
+import org.springframework.stereotype.Service;
 import sorokin_hibernate_dz.application.dto.createRequest.ProfileCreateRequest;
 import sorokin_hibernate_dz.application.dto.patchRequest.ProfilePatchRequest;
 import sorokin_hibernate_dz.application.dto.response.ProfileResponse;
@@ -7,6 +8,7 @@ import sorokin_hibernate_dz.application.mapper.ProfileDtoMapper;
 import sorokin_hibernate_dz.domain.model.ProfileDomain;
 import sorokin_hibernate_dz.domain.repository.ProfileRepository;
 
+@Service
 public class ProfileService {
     private final ProfileRepository profileRepository;
     private final ProfileDtoMapper dtoMapper;

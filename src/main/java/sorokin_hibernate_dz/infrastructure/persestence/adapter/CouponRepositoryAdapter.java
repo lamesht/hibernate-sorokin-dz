@@ -1,5 +1,6 @@
 package sorokin_hibernate_dz.infrastructure.persestence.adapter;
 
+import org.springframework.stereotype.Component;
 import sorokin_hibernate_dz.infrastructure.persestence.repository.ClientJpaReferenceRepository;
 import sorokin_hibernate_dz.domain.model.CouponDomain;
 import sorokin_hibernate_dz.domain.repository.CouponRepository;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
+@Component
 public class CouponRepositoryAdapter implements CouponRepository {
     private final CouponJpaRepository couponJpaRepository;
     private final ClientJpaReferenceRepository clientJpaReferenceRepository;

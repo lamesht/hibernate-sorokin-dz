@@ -1,4 +1,4 @@
-package sorokin_hibernate_dz.shared;
+package sorokin_hibernate_dz;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

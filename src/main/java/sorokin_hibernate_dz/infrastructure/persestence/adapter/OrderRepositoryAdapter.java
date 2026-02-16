@@ -1,5 +1,6 @@
 package sorokin_hibernate_dz.infrastructure.persestence.adapter;
 
+import org.springframework.stereotype.Component;
 import sorokin_hibernate_dz.domain.model.OrderDomain;
 import sorokin_hibernate_dz.domain.model.OrderStatus;
 import sorokin_hibernate_dz.domain.repository.OrderRepository;
@@ -11,6 +12,7 @@ import sorokin_hibernate_dz.shared.exception.OrderNotFoundException;
 import java.time.LocalDate;
 import java.util.List;
 
+@Component
 public class OrderRepositoryAdapter implements OrderRepository {
     private final OrderJpaRepository orderJpaRepository;
     private final OrderJpaMapper jpaMapper;

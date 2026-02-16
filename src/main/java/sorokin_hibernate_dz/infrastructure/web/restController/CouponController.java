@@ -1,9 +1,5 @@
 package sorokin_hibernate_dz.infrastructure.web.restController;
 
-import sorokin_hibernate_dz.application.dto.createRequest.CouponCreateRequest;
-import sorokin_hibernate_dz.application.dto.patchRequest.CouponPatchRequest;
-import sorokin_hibernate_dz.application.dto.response.CouponResponse;
-import sorokin_hibernate_dz.application.service.CouponService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +11,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import sorokin_hibernate_dz.application.dto.createRequest.CouponCreateRequest;
+import sorokin_hibernate_dz.application.dto.patchRequest.ClientIdsRequest;
+import sorokin_hibernate_dz.application.dto.patchRequest.CouponPatchRequest;
+import sorokin_hibernate_dz.application.dto.response.CouponResponse;
+import sorokin_hibernate_dz.application.service.CouponService;
 
 import java.util.List;
 
@@ -64,9 +65,9 @@ public class CouponController {
     @PostMapping("/{couponId}/clients")
     public ResponseEntity<Void> addClientsToCoupon(
             @PathVariable Long couponId,
-            @RequestBody List<Long> clientIds
+            @RequestBody ClientIdsRequest request
     ){
-        couponService.addClientsToCoupon(couponId, clientIds);
+        couponService.addClientsToCoupon(couponId, request.clientIds());
 
         return ResponseEntity.ok().build();
     }
@@ -74,9 +75,9 @@ public class CouponController {
     @DeleteMapping("/{couponId}/clients")
     public ResponseEntity<Void> removeClientsFromCoupon(
             @PathVariable Long couponId,
-            @RequestBody List<Long> clientIds
+            @RequestBody ClientIdsRequest request
     ){
-        couponService.removeClientsFromCoupon(couponId, clientIds);
+        couponService.removeClientsFromCoupon(couponId, request.clientIds());
 
         return ResponseEntity.ok().build();
     }

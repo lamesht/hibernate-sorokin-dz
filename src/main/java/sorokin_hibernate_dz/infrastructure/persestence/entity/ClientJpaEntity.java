@@ -32,7 +32,6 @@ public class ClientJpaEntity {
 
     @OneToOne(mappedBy = "client", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL, orphanRemoval = true)
-    @Column(name = "profileId")
     private ProfileJpaEntity profile;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
@@ -76,5 +75,5 @@ public class ClientJpaEntity {
         return registrationDate;
     }
 
-    private ClientJpaEntity() {}
+    ClientJpaEntity() {}
 }

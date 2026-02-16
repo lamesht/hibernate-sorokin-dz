@@ -1,9 +1,11 @@
 package sorokin_hibernate_dz.application.mapper;
 
+import org.springframework.stereotype.Component;
 import sorokin_hibernate_dz.application.dto.createRequest.ProfileCreateRequest;
 import sorokin_hibernate_dz.application.dto.response.ProfileResponse;
 import sorokin_hibernate_dz.domain.model.ProfileDomain;
 
+@Component
 public class ProfileDtoMapper {
 
     public ProfileDomain fromCreateRequest(

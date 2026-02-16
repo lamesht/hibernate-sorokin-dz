@@ -1,9 +1,11 @@
 package sorokin_hibernate_dz.application.mapper;
 
+import org.springframework.stereotype.Component;
 import sorokin_hibernate_dz.application.dto.createRequest.OrderCreateRequest;
 import sorokin_hibernate_dz.application.dto.response.OrderResponse;
 import sorokin_hibernate_dz.domain.model.OrderDomain;
 
+@Component
 public class OrderDtoMapper {
     public OrderDomain fromCreateRequest(Long clientId, OrderCreateRequest createRequest) {
         return OrderDomain.create(

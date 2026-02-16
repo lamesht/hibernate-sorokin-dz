@@ -1,9 +1,11 @@
 package sorokin_hibernate_dz.infrastructure.persestence.mapper;
 
+import org.springframework.stereotype.Component;
 import sorokin_hibernate_dz.domain.model.ProfileDomain;
 import sorokin_hibernate_dz.infrastructure.persestence.entity.ProfileJpaEntity;
 import sorokin_hibernate_dz.infrastructure.persestence.repository.ClientJpaReferenceRepository;
 
+@Component
 public class ProfileJpaMapper {
     private final ClientJpaReferenceRepository clientJpaReferenceRepository;
 

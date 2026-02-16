@@ -29,10 +29,10 @@ public class CouponJpaEntity {
     @JoinTable(
             name = "coupon_clients",
             joinColumns = @JoinColumn(
-                    name = "client_id", nullable = false
+                    name = "coupon_id", nullable = false
             ),
             inverseJoinColumns = @JoinColumn(
-                    name = "coupon_id", nullable = false
+                    name = "client_id", nullable = false
             )
     )
     private List<ClientJpaEntity> clients = new ArrayList<>();
