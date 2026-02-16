@@ -2,7 +2,6 @@ package sorokin_hibernate_dz.application.dto.patchRequest;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
 
 public class ProfilePatchRequest {
     @NotBlank @Size(max = 255)

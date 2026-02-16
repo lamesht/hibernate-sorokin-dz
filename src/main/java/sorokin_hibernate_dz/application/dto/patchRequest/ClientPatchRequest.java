@@ -1,9 +1,7 @@
 package sorokin_hibernate_dz.application.dto.patchRequest;
 
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
 
-@Getter
 public class ClientPatchRequest {
     @Size(max = 255)
     private String name;
@@ -12,5 +10,13 @@ public class ClientPatchRequest {
 
     public boolean hasUpdates() {
         return !name.isBlank() || !email.isBlank();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
     }
 }

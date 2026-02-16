@@ -1,13 +1,10 @@
 package sorokin_hibernate_dz.shared.exceptionHandler;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.ToString;
 
 import java.time.LocalDateTime;
 
-@Getter
-@ToString
+
 public class ErrorResponse{
     @NotNull
     private final String code;
@@ -22,4 +19,24 @@ public class ErrorResponse{
         this.timeStamp = LocalDateTime.now();
     }
 
+    public String getCode() {
+        return code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public LocalDateTime getTimeStamp() {
+        return timeStamp;
+    }
+
+    @Override
+    public String toString() {
+        return "ErrorResponse{" +
+                "code='" + code + '\'' +
+                ", message='" + message + '\'' +
+                ", timeStamp=" + timeStamp +
+                '}';
+    }
 }

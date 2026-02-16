@@ -3,7 +3,6 @@ package sorokin_hibernate_dz.application.dto.patchRequest;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
 
 public class CouponPatchRequest {
     @Size(max = 255)
