@@ -1,4 +1,4 @@
-package sorokin_hibernate_dz.shared;
+package sorokin_hibernate_dz.shared.exceptionHandler;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

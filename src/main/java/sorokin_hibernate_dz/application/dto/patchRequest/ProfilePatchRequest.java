@@ -4,7 +4,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 
-@Getter
 public class ProfilePatchRequest {
     @NotBlank @Size(max = 255)
     private String address;
@@ -24,5 +23,11 @@ public class ProfilePatchRequest {
         return phoneNumber != null;
     }
 
+    public String getAddress() {
+        return address;
+    }
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
 }

@@ -1,44 +1,59 @@
 package sorokin_hibernate_dz.application.service;
 
-import sorokin_hibernate_dz.order.Order;
-import sorokin_hibernate_dz.infrastructure.persestence.repository.OrderJpaRepository;
-import sorokin_hibernate_dz.domain.model.OrderStatus;
 import org.springframework.stereotype.Service;
+import sorokin_hibernate_dz.application.dto.createRequest.OrderCreateRequest;
+import sorokin_hibernate_dz.application.dto.filter.BetweenDateFilter;
+import sorokin_hibernate_dz.application.dto.filter.BetweenTotalAmountFilter;
+import sorokin_hibernate_dz.application.dto.response.OrderResponse;
+import sorokin_hibernate_dz.application.mapper.OrderDtoMapper;
+import sorokin_hibernate_dz.domain.model.OrderStatus;
+import sorokin_hibernate_dz.domain.repository.OrderRepository;
 
-import java.time.LocalDateTime;
-import java.util.Collections;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
 public class OrderService {
-    private final OrderJpaRepository orderJpaRepository;
+    private final OrderRepository orderRepository;
+    private final OrderDtoMapper dtoMapper;
 
-    public OrderService(OrderJpaRepository orderJpaRepository) {
-        this.orderJpaRepository = orderJpaRepository;
+    public OrderService(OrderRepository orderRepository, OrderDtoMapper dtoMapper) {
+        this.orderRepository = orderRepository;
+        this.dtoMapper = dtoMapper;
     }
 
-    public Order createNewOrder(Client client, Long totalAmount){
-        return orderJpaRepository.save(new Order(client, totalAmount));
+    public OrderResponse createNewOrder(Long clientId, OrderCreateRequest createRequest){
+        var domainWithoutId = dtoMapper.fromCreateRequest(clientId, createRequest);
+
+        var savedDomain = orderRepository.save(domainWithoutId);
+
+        return dtoMapper.toResponse(savedDomain);
     }
 
-    public void addNewOrderForClient(Client client, Long totalAmount){
-        Order order = createNewOrder(client, totalAmount);
+    public List<OrderResponse> findOrdersByDateRange(BetweenDateFilter dateFilter) {
+        var from = dateFilter.from();
+        var to = dateFilter.to();
 
-        client.addOrder(order);
+        return orderRepository.findOrdersByDateRange(from, to)
+                .stream()
+                .map(dtoMapper::toResponse)
+                .toList();
     }
 
-    public List<Order> findOrdersByDateRange(LocalDateTime startDate, LocalDateTime endDate) {
-        List<Order> requiredOrders = orderJpaRepository.findByOrderDateBetween(startDate, endDate);
-        return Collections.unmodifiableList(requiredOrders);
+    public List<OrderResponse> findOrdersByAmountRange(BetweenTotalAmountFilter totalAmountFilter) {
+        var min = totalAmountFilter.min();
+        var max = totalAmountFilter.max();
+
+        return orderRepository.findOrdersByTotalAmountRange(min, max)
+                .stream()
+                .map(dtoMapper::toResponse)
+                .toList();
     }
 
-    public List<Order> findOrdersByAmountRange(Long minAmount, Long maxAmount) {
-        List<Order> requiredOrders = orderJpaRepository.findByTotalAmountBetween(minAmount, maxAmount);
-        return Collections.unmodifiableList(requiredOrders);
-    }
-
-    public List<Order> findOrdersByStatus(OrderStatus status) {
-        List<Order> requiredOrders = orderJpaRepository.findByStatus(status);
-        return Collections.unmodifiableList(requiredOrders);
+    public List<OrderResponse> findOrdersByStatus(OrderStatus status) {
+        return orderRepository.findByStatus(status)
+                .stream()
+                .map(dtoMapper::toResponse)
+                .toList();
     }
 }
