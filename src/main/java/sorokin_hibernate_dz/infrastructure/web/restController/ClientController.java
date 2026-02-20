@@ -1,6 +1,8 @@
 package sorokin_hibernate_dz.infrastructure.web.restController;
 
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +17,7 @@ import sorokin_hibernate_dz.application.service.ClientService;
 @RestController
 @RequestMapping("/app/client")
 public class ClientController {
+    private final static Logger log = LoggerFactory.getLogger(ClientController.class);
     private final ClientService clientService;
 
     public ClientController(ClientService clientService) {
@@ -27,7 +30,7 @@ public class ClientController {
     ){
         var response = clientService.createClient(createRequest);
 
-
+        log.info("Client created: id={}", response.id());
         return ResponseEntity.ok(response);
     }
 
@@ -36,6 +39,8 @@ public class ClientController {
             @PathVariable Long clientId
     ){
         clientService.deleteClient(clientId);
+
+        log.info("Client deleted: id={}", clientId);
         return ResponseEntity.noContent().build();
     }
 }

@@ -4,16 +4,17 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public class ProfileCreateRequest {
-    @NotNull
-    @NotBlank
-    @Size(max = 255)
-    private String address;
+public record ProfileCreateRequest(
+        @NotNull
+        @NotBlank
+        @Size(max = 255)
+        String address,
 
-    @NotNull
-    @NotBlank
-    @Size(max = 255)
-    private String phoneNumber;
+        @NotNull
+        @NotBlank
+        @Size(max = 255)
+        String phoneNumber
+) {
 
     public String getAddress() {
         return address;
